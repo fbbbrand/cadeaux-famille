@@ -1,56 +1,543 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Random Weapon</title>
-    <link rel="stylesheet" type="text/css" href="styles.css">
-    <link href='https://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
-    <link href="https://fonts.cdnfonts.com/css/valorant" rel="stylesheet">
-                
-    <link
-    href="https://fonts.googleapis.com/css?family=Lato:300,400,700"
-    rel="stylesheet"
-    type="text/css"
-  />
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#b4442b">
+<title>Cadeaux de la famille</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎁</text></svg>">
+<style>
+  :root {
+    --bg: #f7f2ea;
+    --card: #ffffff;
+    --ink: #2a2420;
+    --muted: #7a6f66;
+    --line: #e7ddd0;
+    --accent: #b4442b;
+    --accent-ink: #ffffff;
+    --go: #2f7a55;
+    --go-soft: #e6f2ea;
+    --taken: #f1ece5;
+    --danger: #b3261e;
+    --danger-soft: #fbe9e7;
+    --focus: #1f6feb;
+    --radius: 14px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1b1816;
+      --card: #262220;
+      --ink: #f3ece4;
+      --muted: #a89c91;
+      --line: #3a3430;
+      --accent: #e0775c;
+      --accent-ink: #1b1816;
+      --go: #6cc497;
+      --go-soft: #1f3529;
+      --taken: #2e2925;
+      --danger: #f08a80;
+      --danger-soft: #3b2220;
+      --focus: #7aa7ff;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 16px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    padding: 0 16px calc(48px + env(safe-area-inset-bottom));
+  }
+  main, header { max-width: 640px; margin: 0 auto; }
+  header { padding: 20px 0 8px; }
+  h1 { font-size: 1.6rem; margin: 0 0 14px; letter-spacing: -0.01em; }
+  h2 {
+    font-size: .8rem; text-transform: uppercase; letter-spacing: .08em;
+    color: var(--muted); margin: 28px 4px 10px;
+  }
+  button, input { font: inherit; color: inherit; }
+  button { cursor: pointer; }
+  :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+  .me {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 12px 14px;
+  }
+  .me label { display: block; font-weight: 600; margin-bottom: 6px; }
+  .me small { display: block; color: var(--muted); margin-top: 6px; }
+  .me.attention { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent); }
+
+  input[type=text], input[type=url] {
+    width: 100%; min-height: 44px; padding: 10px 12px;
+    border: 1px solid var(--line); border-radius: 10px; background: var(--bg);
+    font-size: 16px;
+  }
+  input::placeholder { color: var(--muted); opacity: .8; }
+
+  .banner {
+    max-width: 640px; margin: 10px auto 0; padding: 10px 14px; border-radius: 10px;
+    background: var(--danger-soft); color: var(--danger); font-size: .95rem;
+  }
+  .banner[hidden] { display: none; }
+
+  .person {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    margin-bottom: 14px; overflow: hidden;
+  }
+  .person-head {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 8px;
+    padding: 14px 16px 10px;
+  }
+  .person-head h3 { margin: 0; font-size: 1.25rem; overflow-wrap: anywhere; }
+  .count { color: var(--muted); font-size: .85rem; white-space: nowrap; }
+  ul.items { list-style: none; margin: 0; padding: 0; }
+  .empty { color: var(--muted); padding: 4px 16px 12px; margin: 0; font-style: italic; }
+
+  .item {
+    display: flex; gap: 12px; padding: 12px 16px; border-top: 1px solid var(--line);
+  }
+  .item.taken { background: var(--taken); }
+  .item img {
+    width: 64px; height: 64px; object-fit: contain; flex: none;
+    background: #fff; border-radius: 10px; border: 1px solid var(--line);
+  }
+  .item-body { flex: 1; min-width: 0; }
+  .label { font-weight: 600; overflow-wrap: anywhere; }
+  .item.taken .label { color: var(--muted); }
+  .meta { color: var(--muted); font-size: .9rem; margin-top: 2px; display: flex; flex-wrap: wrap; gap: 4px 10px; }
+  .meta a { color: var(--accent); font-weight: 600; text-decoration: none; }
+  .meta a:hover { text-decoration: underline; }
+  .note { font-size: .9rem; margin-top: 2px; overflow-wrap: anywhere; }
+  .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 10px; }
+
+  .btn {
+    min-height: 40px; padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line);
+    background: var(--card); font-weight: 600; font-size: .95rem;
+    transition: background .15s, color .15s, border-color .15s;
+  }
+  .btn-go { background: var(--go); border-color: var(--go); color: #fff; }
+  @media (prefers-color-scheme: dark) { .btn-go { color: #0f1f17; } }
+  .btn-primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  .btn-ghost { background: transparent; border-color: transparent; color: var(--muted); font-weight: 500; padding-inline: 8px; }
+  .btn-armed { background: var(--danger); border-color: var(--danger); color: #fff; }
+  @media (prefers-color-scheme: dark) { .btn-armed { color: #1b1816; } }
+  .btn:disabled { opacity: .55; cursor: default; }
+  .push { margin-left: auto; }
+
+  .badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--go-soft); color: var(--go); font-weight: 700; font-size: .9rem;
+    padding: 6px 12px; border-radius: 999px; overflow-wrap: anywhere;
+  }
+
+  .add-zone { padding: 10px 16px 14px; border-top: 1px solid var(--line); }
+  .add-toggle { width: 100%; background: transparent; border-style: dashed; color: var(--accent); }
+  form.add { display: grid; gap: 10px; }
+  form.add[hidden] { display: none; }
+  .field label { display: block; font-size: .9rem; font-weight: 600; margin-bottom: 4px; }
+  .field label span { color: var(--muted); font-weight: 400; }
+  .row { display: flex; gap: 10px; }
+  .row > * { flex: 1; }
+  .form-actions { display: flex; gap: 8px; justify-content: flex-end; }
+  .error { color: var(--danger); font-size: .9rem; margin: 0; }
+  .error:empty { display: none; }
+
+  .new-person { background: var(--card); border: 1px dashed var(--line); border-radius: var(--radius); padding: 14px 16px; margin-top: 24px; }
+  .new-person h2 { margin: 0 0 10px; }
+  .seg { display: flex; border: 1px solid var(--line); border-radius: 999px; padding: 3px; background: var(--bg); }
+  .seg label { flex: 1; text-align: center; padding: 8px 0; border-radius: 999px; cursor: pointer; font-weight: 600; min-height: 38px; }
+  .seg input { position: absolute; opacity: 0; pointer-events: none; }
+  .seg input:checked + span { color: var(--accent-ink); }
+  .seg label:has(input:checked) { background: var(--accent); color: var(--accent-ink); }
+  .seg label:has(input:focus-visible) { outline: 3px solid var(--focus); outline-offset: 1px; }
+
+  .loading { text-align: center; color: var(--muted); padding: 40px 0; }
+
+  #toast {
+    position: fixed; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom));
+    transform: translate(-50%, 20px); opacity: 0; pointer-events: none;
+    background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 12px;
+    max-width: calc(100% - 32px); width: max-content; font-size: .95rem;
+    transition: opacity .2s, transform .2s; z-index: 10;
+  }
+  #toast.show { opacity: 1; transform: translate(-50%, 0); }
+</style>
 </head>
-  <body>
-    <div id="title">
-        <span> RANDOM </span>
-        <br />
-        <span> WEAPON </span>
-      </div>
+<body>
+<header>
+  <h1>🎁 Cadeaux de la famille</h1>
+  <div class="me" id="meBox">
+    <label for="me">Ton prénom</label>
+    <input id="me" type="text" maxlength="40" autocomplete="given-name" placeholder="Ex. : Julie">
+    <small>Il s'affiche quand tu réserves une idée. Il reste enregistré sur ce téléphone.</small>
+  </div>
+</header>
 
-      <div class ="droite">
-        <button class="btn"  id="btnWeapons">RESET</button>
-        <button class="btn2" id="btnPick" onclick="pickRandomWeapon()">TIRAGE AU SORT</button>
-        <button class="btn3" id="btnPickAll">TOUT SELECTIONNER</button>
+<div class="banner" id="offline" hidden>Connexion perdue… les changements seront envoyés dès le retour du réseau.</div>
+<div class="banner" id="fatal" hidden></div>
 
-      </div>
-    <div class="carre">
-        <div class="grid-container">
-          <div class="image image-classic"></div>
-          <div class="image image-ghost"></div>
-          <div class="image image-frenzy"></div>
-          <div class="image image-sheriff"></div>
-          <div class="image image-shorty"></div>
-          <div class="image image-knife"></div>
-          <div class="image image-stinger"></div>
-          <div class="image image-spectre"></div>
-          <div class="image image-bulldog"></div>
-          <div class="image image-bucky"></div>
-          <div class="image image-judge"></div>
-          <div class="image image-marshall"></div>
-          <div class="image image-ares"></div>
-          <div class="image image-odin"></div>
-          <div class="image image-operator"></div>
-          <div class="image image-guardian"></div>
-          <div class="image image-phantom"></div>
-          <div class="image image-vandal"></div>
+<main>
+  <p class="loading" id="loading">Chargement…</p>
+  <div id="lists" hidden>
+    <h2>Enfants</h2>
+    <div id="group-enfant"></div>
+    <h2>Adultes</h2>
+    <div id="group-adulte"></div>
+
+    <section class="new-person">
+      <h2>Ajouter une personne</h2>
+      <form class="add" id="personForm" novalidate>
+        <div class="field">
+          <label for="pName">Prénom</label>
+          <input id="pName" type="text" maxlength="40" required autocomplete="off">
         </div>
+        <div class="seg" role="radiogroup" aria-label="Catégorie">
+          <label><input type="radio" name="group" value="enfant" checked><span>Enfant</span></label>
+          <label><input type="radio" name="group" value="adulte"><span>Adulte</span></label>
+        </div>
+        <p class="error" id="pError"></p>
+        <div class="form-actions"><button class="btn btn-primary" type="submit">Ajouter</button></div>
+      </form>
+    </section>
+  </div>
+</main>
 
+<div id="toast" role="status" aria-live="polite"></div>
 
-    </div>
-  
+<script type="module">
+const SDK = "https://www.gstatic.com/firebasejs/12.4.0/";
+const LIMITS = { name: 40, label: 120, url: 500, note: 300 };
+const NAME_KEY = "cadeaux.prenom";
 
-    <script src="script.js"></script>
-  </body>
-  </html>
+// ---------- petits utilitaires ----------
+const $ = (sel) => document.querySelector(sel);
+
+// Construit un élément DOM. Les textes passent toujours par textContent
+// (jamais innerHTML) : aucune saisie ne peut injecter du HTML.
+function h(tag, attrs = {}, ...children) {
+  const el = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (v == null || v === false) continue;
+    if (k === "class") el.className = v;
+    else if (k.startsWith("on")) el.addEventListener(k.slice(2), v);
+    else el.setAttribute(k, v === true ? "" : String(v));
+  }
+  for (const c of children.flat()) {
+    if (c == null || c === false) continue;
+    el.append(c instanceof Node ? c : document.createTextNode(String(c)));
+  }
+  return el;
+}
+
+const clean = (s, max) => String(s ?? "").replace(/\s+/g, " ").trim().slice(0, max);
+
+// N'accepte que les liens http(s) ; ajoute https:// si on a tapé « www.… ».
+function safeUrl(raw) {
+  let s = String(raw ?? "").trim();
+  if (!s) return "";
+  if (!/^[a-z][a-z0-9+.-]*:/i.test(s) && /^[^\s/]+\.[^\s]+/.test(s)) s = "https://" + s;
+  if (s.length > LIMITS.url || /\s/.test(s)) return null;
+  try {
+    const u = new URL(s);
+    return (u.protocol === "http:" || u.protocol === "https:") ? u.href : null;
+  } catch { return null; }
+}
+
+// Images : uniquement un fichier du dossier img/ ou une adresse https.
+function safeImg(raw) {
+  const s = String(raw ?? "").trim();
+  if (/^img\/[a-zA-Z0-9_-]+\.(jpg|jpeg|png|webp)$/.test(s)) return s;
+  if (/^https:\/\/[^\s]+$/.test(s)) { try { return new URL(s).href; } catch {} }
+  return "";
+}
+
+function parsePrice(raw) {
+  const s = String(raw ?? "").replace(/[\s€]/g, "").replace(",", ".");
+  if (!s) return undefined;
+  if (!/^\d+(\.\d{1,2})?$/.test(s)) return null;
+  const n = Math.round(parseFloat(s) * 100) / 100;
+  return n <= 100000 ? n : null;
+}
+const euro = new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR" });
+
+let toastTimer;
+function toast(msg) {
+  const t = $("#toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("show"), 3200);
+}
+
+function fatal(msg) {
+  $("#loading").hidden = true;
+  const f = $("#fatal");
+  f.textContent = msg;
+  f.hidden = false;
+}
+
+// ---------- prénom (localStorage) ----------
+const meInput = $("#me");
+function getMe() { return clean(meInput.value, LIMITS.name); }
+try { meInput.value = localStorage.getItem(NAME_KEY) || ""; } catch {}
+meInput.addEventListener("input", () => {
+  $("#meBox").classList.remove("attention");
+  try { localStorage.setItem(NAME_KEY, getMe()); } catch {}
+});
+function askName() {
+  $("#meBox").classList.add("attention");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  setTimeout(() => meInput.focus({ preventScroll: true }), 250);
+  toast("Tape d'abord ton prénom en haut de la page.");
+}
+
+// ---------- confirmation en 2 temps ----------
+// Premier appui : le bouton passe en rouge « Confirmer ? ». Second appui
+// dans les 4 secondes : l'action est faite. Sinon, retour à l'état normal.
+let armed = null; // { key, timer }
+function disarm() {
+  if (!armed) return;
+  clearTimeout(armed.timer);
+  armed = null;
+  render();
+}
+function twoStep(key, action) {
+  if (armed && armed.key === key) {
+    clearTimeout(armed.timer);
+    armed = null;
+    action();
+    render();
+    return;
+  }
+  if (armed) clearTimeout(armed.timer);
+  armed = { key, timer: setTimeout(disarm, 4000) };
+  render();
+}
+const isArmed = (key) => armed && armed.key === key;
+
+// ---------- démarrage Firebase ----------
+let db, fb;
+let people = null, items = null;
+
+async function start() {
+  let firebaseConfig;
+  try {
+    ({ firebaseConfig } = await import("./firebase-config.js"));
+  } catch {
+    return fatal("Fichier firebase-config.js introuvable.");
+  }
+  if (!firebaseConfig || JSON.stringify(firebaseConfig).includes("A_REMPLACER")) {
+    return fatal("Site pas encore configuré : colle la configuration de ton projet Firebase dans firebase-config.js.");
+  }
+  try {
+    const [{ initializeApp }, dbm] = await Promise.all([
+      import(SDK + "firebase-app.js"),
+      import(SDK + "firebase-database.js"),
+    ]);
+    fb = dbm;
+    db = dbm.getDatabase(initializeApp(firebaseConfig));
+  } catch (e) {
+    console.error(e);
+    return fatal("Impossible de charger Firebase. Vérifie ta connexion puis recharge la page.");
+  }
+
+  const onErr = (e) => { console.error(e); fatal("Lecture impossible : vérifie les règles de la base Firebase."); };
+  fb.onValue(fb.ref(db, "people"), (s) => { people = s.val() || {}; render(); }, onErr);
+  fb.onValue(fb.ref(db, "items"), (s) => { items = s.val() || {}; render(); }, onErr);
+
+  // Bandeau « hors ligne » (après un court délai pour éviter un flash au démarrage)
+  let ready = false;
+  setTimeout(() => { ready = true; }, 3000);
+  fb.onValue(fb.ref(db, ".info/connected"), (s) => {
+    $("#offline").hidden = s.val() === true || !ready;
+  });
+}
+
+// ---------- actions ----------
+async function reserve(id) {
+  const me = getMe();
+  if (!me) return askName();
+  try {
+    const res = await fb.runTransaction(fb.ref(db, `items/${id}/takenBy`), (cur) => (cur ? undefined : me));
+    if (!res.committed) toast(`Déjà pris par ${res.snapshot.val()}.`);
+  } catch (e) {
+    console.error(e);
+    toast("Impossible de réserver (l'idée a peut-être été supprimée).");
+  }
+}
+
+async function release(id) {
+  try { await fb.remove(fb.ref(db, `items/${id}/takenBy`)); }
+  catch (e) { console.error(e); toast("Impossible de libérer cette idée."); }
+}
+
+async function removeItem(id) {
+  try { await fb.remove(fb.ref(db, `items/${id}`)); toast("Idée supprimée."); }
+  catch (e) { console.error(e); toast("Impossible de supprimer cette idée."); }
+}
+
+async function addItem(personId, form) {
+  const err = form.querySelector(".error");
+  const label = clean(form.elements.label.value, LIMITS.label);
+  const price = parsePrice(form.elements.price.value);
+  const url = safeUrl(form.elements.url.value);
+  if (!label) { err.textContent = "L'intitulé est obligatoire."; form.elements.label.focus(); return; }
+  if (price === null) { err.textContent = "Prix invalide (ex. : 24,90)."; form.elements.price.focus(); return; }
+  if (url === null) { err.textContent = "Le lien doit commencer par http:// ou https://"; form.elements.url.focus(); return; }
+  err.textContent = "";
+  const data = { personId, label, order: Date.now() };
+  if (price !== undefined) data.price = price;
+  if (url) data.url = url;
+  const btn = form.querySelector("[type=submit]");
+  btn.disabled = true;
+  try {
+    await fb.set(fb.push(fb.ref(db, "items")), data);
+    form.reset();
+    form.hidden = true;
+    form.previousElementSibling.hidden = false;
+    toast("Idée ajoutée.");
+  } catch (e) {
+    console.error(e);
+    err.textContent = "L'ajout a échoué. Réessaie.";
+  } finally { btn.disabled = false; }
+}
+
+$("#personForm").addEventListener("submit", async (ev) => {
+  ev.preventDefault();
+  const form = ev.currentTarget;
+  const err = $("#pError");
+  const name = clean(form.elements.pName.value, LIMITS.name);
+  const group = form.elements.group.value === "adulte" ? "adulte" : "enfant";
+  if (!name) { err.textContent = "Le prénom est obligatoire."; form.elements.pName.focus(); return; }
+  const exists = Object.values(people || {}).some((p) => String(p.name).toLocaleLowerCase("fr") === name.toLocaleLowerCase("fr"));
+  if (exists) { err.textContent = `${name} est déjà dans la liste.`; return; }
+  err.textContent = "";
+  const btn = form.querySelector("[type=submit]");
+  btn.disabled = true;
+  try {
+    await fb.set(fb.push(fb.ref(db, "people")), { name, group, order: Date.now() });
+    form.reset();
+    toast(`${name} a été ajouté·e.`);
+  } catch (e) {
+    console.error(e);
+    err.textContent = "L'ajout a échoué. Réessaie.";
+  } finally { btn.disabled = false; }
+});
+
+// ---------- affichage ----------
+// Chaque personne a une carte créée une seule fois (le formulaire d'ajout
+// garde donc sa saisie) ; seule la liste des idées est redessinée.
+const cards = new Map();
+
+function makeCard(id) {
+  const title = h("h3");
+  const count = h("span", { class: "count" });
+  const list = h("ul", { class: "items" });
+  const empty = h("p", { class: "empty" }, "Aucune idée pour l'instant.");
+
+  const form = h("form", { class: "add", hidden: true, novalidate: true },
+    h("div", { class: "field" },
+      h("label", { for: `l-${id}` }, "Intitulé"),
+      h("input", { id: `l-${id}`, name: "label", type: "text", maxlength: LIMITS.label, required: true, autocomplete: "off" })),
+    h("div", { class: "row" },
+      h("div", { class: "field" },
+        h("label", { for: `p-${id}` }, "Prix ", h("span", {}, "(facultatif)")),
+        h("input", { id: `p-${id}`, name: "price", type: "text", inputmode: "decimal", maxlength: 12, placeholder: "€", autocomplete: "off" })),
+      h("div", { class: "field" },
+        h("label", { for: `u-${id}` }, "Lien ", h("span", {}, "(facultatif)")),
+        h("input", { id: `u-${id}`, name: "url", type: "url", inputmode: "url", maxlength: LIMITS.url, placeholder: "https://…", autocomplete: "off" }))),
+    h("p", { class: "error" }),
+    h("div", { class: "form-actions" },
+      h("button", { class: "btn btn-ghost", type: "button", onclick: () => { form.reset(); form.querySelector(".error").textContent = ""; form.hidden = true; toggle.hidden = false; } }, "Annuler"),
+      h("button", { class: "btn btn-primary", type: "submit" }, "Ajouter")));
+  form.addEventListener("submit", (ev) => { ev.preventDefault(); addItem(id, form); });
+
+  const toggle = h("button", { class: "btn add-toggle", type: "button", onclick: () => {
+    toggle.hidden = true; form.hidden = false; form.elements.label.focus();
+  } }, "+ Ajouter une idée");
+
+  const root = h("section", { class: "person", "data-person": id },
+    h("div", { class: "person-head" }, title, count),
+    empty, list,
+    h("div", { class: "add-zone" }, toggle, form));
+  const card = { root, title, count, list, empty };
+  cards.set(id, card);
+  return card;
+}
+
+function renderItem(id, it) {
+  const taken = typeof it.takenBy === "string" && it.takenBy !== "";
+  const me = getMe();
+  const url = safeUrl(it.url);
+  const img = safeImg(it.img);
+  const delKey = `del:${id}`, relKey = `rel:${id}`;
+
+  const meta = [];
+  if (typeof it.price === "number") meta.push(h("span", {}, euro.format(it.price)));
+  if (url) meta.push(h("a", { href: url, target: "_blank", rel: "noopener noreferrer nofollow" }, "Voir le lien ↗"));
+
+  const status = taken
+    ? [
+        h("span", { class: "badge" }, `Pris par ${it.takenBy}${me && it.takenBy.toLocaleLowerCase("fr") === me.toLocaleLowerCase("fr") ? " (toi)" : ""}`),
+        h("button", { class: `btn ${isArmed(relKey) ? "btn-armed" : ""}`, type: "button", onclick: () => twoStep(relKey, () => release(id)) },
+          isArmed(relKey) ? "Confirmer la libération ?" : "Libérer"),
+      ]
+    : [h("button", { class: "btn btn-go", type: "button", onclick: () => reserve(id) }, "Je m'en occupe")];
+
+  return h("li", { class: `item${taken ? " taken" : ""}`, "data-item": id },
+    img ? h("img", { src: img, alt: "", loading: "lazy", width: 64, height: 64, onerror: (e) => e.currentTarget.remove() }) : null,
+    h("div", { class: "item-body" },
+      h("div", { class: "label" }, it.label),
+      meta.length ? h("div", { class: "meta" }, meta) : null,
+      typeof it.note === "string" && it.note ? h("div", { class: "note" }, it.note) : null,
+      h("div", { class: "actions" },
+        status,
+        h("button", { class: `btn push ${isArmed(delKey) ? "btn-armed" : "btn-ghost"}`, type: "button", onclick: () => twoStep(delKey, () => removeItem(id)) },
+          isArmed(delKey) ? "Confirmer la suppression ?" : "Supprimer"))));
+}
+
+const byOrder = (a, b) => (Number(a[1].order) || 0) - (Number(b[1].order) || 0) || String(a[0]).localeCompare(String(b[0]));
+
+function render() {
+  if (people === null || items === null) return;
+  $("#loading").hidden = true;
+  $("#lists").hidden = false;
+
+  const itemsByPerson = new Map();
+  for (const entry of Object.entries(items).sort(byOrder)) {
+    const it = entry[1];
+    if (!it || typeof it.label !== "string") continue;
+    if (!itemsByPerson.has(it.personId)) itemsByPerson.set(it.personId, []);
+    itemsByPerson.get(it.personId).push(entry);
+  }
+
+  const seen = new Set();
+  for (const group of ["enfant", "adulte"]) {
+    const container = $(`#group-${group}`);
+    const list = Object.entries(people).filter(([, p]) => p && p.group === group && typeof p.name === "string").sort(byOrder);
+    list.forEach(([pid, p], i) => {
+      seen.add(pid);
+      const card = cards.get(pid) || makeCard(pid);
+      card.title.textContent = p.name;
+      const its = itemsByPerson.get(pid) || [];
+      const nTaken = its.filter(([, it]) => it.takenBy).length;
+      card.count.textContent = its.length
+        ? `${its.length} idée${its.length > 1 ? "s" : ""} · ${nTaken} prise${nTaken > 1 ? "s" : ""}`
+        : "";
+      card.empty.hidden = its.length > 0;
+      card.list.replaceChildren(...its.map(([iid, it]) => renderItem(iid, it)));
+      // Ne déplace la carte que si nécessaire (garde le focus dans un formulaire ouvert)
+      if (container.children[i] !== card.root) container.insertBefore(card.root, container.children[i] || null);
+    });
+  }
+  for (const [pid, card] of cards) {
+    if (!seen.has(pid)) { card.root.remove(); cards.delete(pid); }
+  }
+}
+
+start();
+</script>
+</body>
+</html>

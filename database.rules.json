@@ -1,0 +1,35 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+
+    "people": {
+      ".read": true,
+      "$personId": {
+        ".write": "newData.exists() && $personId.length <= 40",
+        ".validate": "newData.hasChildren(['name', 'group', 'order'])",
+        "name": { ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 40" },
+        "group": { ".validate": "newData.val() === 'enfant' || newData.val() === 'adulte'" },
+        "order": { ".validate": "newData.isNumber()" },
+        "$other": { ".validate": false }
+      }
+    },
+
+    "items": {
+      ".read": true,
+      "$itemId": {
+        ".write": "$itemId.length <= 40",
+        ".validate": "newData.hasChildren(['personId', 'label', 'order'])",
+        "personId": { ".validate": "newData.isString() && newData.val().length <= 40 && root.child('people').child(newData.val()).exists()" },
+        "label": { ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 120" },
+        "price": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100000" },
+        "url": { ".validate": "newData.isString() && newData.val().length <= 500 && newData.val().matches(/^https?:\\/\\/[^ ]+$/)" },
+        "img": { ".validate": "newData.isString() && newData.val().length <= 300 && (newData.val() === '' || newData.val().matches(/^img\\/[a-zA-Z0-9_-]+\\.(jpg|jpeg|png|webp)$/) || newData.val().matches(/^https:\\/\\/[^ ]+$/))" },
+        "note": { ".validate": "newData.isString() && newData.val().length <= 300" },
+        "takenBy": { ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 40" },
+        "order": { ".validate": "newData.isNumber()" },
+        "$other": { ".validate": false }
+      }
+    }
+  }
+}

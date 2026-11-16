@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Import des cadeaux</title>
+<style>
+  :root { --bg:#f7f2ea; --card:#fff; --ink:#2a2420; --muted:#7a6f66; --accent:#b4442b; --line:#e7ddd0; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#1b1816; --card:#262220; --ink:#f3ece4; --muted:#a89c91; --accent:#e0775c; --line:#3a3430; } }
+  body { margin:0; padding:24px 16px; background:var(--bg); color:var(--ink); font:16px/1.45 system-ui, sans-serif; }
+  main { max-width:560px; margin:0 auto; background:var(--card); border:1px solid var(--line); border-radius:14px; padding:20px; }
+  h1 { font-size:1.4rem; margin-top:0; }
+  button { font:inherit; font-weight:600; min-height:44px; padding:10px 18px; border-radius:999px; border:0; background:var(--accent); color:#fff; cursor:pointer; }
+  button:disabled { opacity:.5; }
+  #log { white-space:pre-wrap; color:var(--muted); margin-top:16px; }
+  a { color:var(--accent); font-weight:600; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Import des données de départ</h1>
+  <p>À ouvrir <strong>une seule fois</strong>, après avoir rempli <code>firebase-config.js</code> et collé les règles. L'import ne se fait que si la base est vide.</p>
+  <button id="go" type="button">Importer les données</button>
+  <div id="log" role="status" aria-live="polite"></div>
+</main>
+<script type="module">
+const SDK = "https://www.gstatic.com/firebasejs/12.4.0/";
+const log = (m) => { document.getElementById("log").textContent += m + "\n"; };
+const btn = document.getElementById("go");
+
+btn.addEventListener("click", async () => {
+  btn.disabled = true;
+  try {
+    const { firebaseConfig } = await import("./firebase-config.js");
+    if (JSON.stringify(firebaseConfig).includes("A_REMPLACER")) throw new Error("firebase-config.js n'est pas encore rempli.");
+    const [{ initializeApp }, { getDatabase, ref, get, set }] = await Promise.all([
+      import(SDK + "firebase-app.js"), import(SDK + "firebase-database.js"),
+    ]);
+    const db = getDatabase(initializeApp(firebaseConfig));
+    const data = await (await fetch("seed.json", { cache: "no-store" })).json();
+
+    const existing = await get(ref(db, "people"));
+    if (existing.exists()) {
+      log("La base contient déjà des personnes : import annulé pour ne rien écraser.");
+      return;
+    }
+    // Les règles interdisent d'écrire la base d'un coup : on écrit élément par élément,
+    // les personnes d'abord (une idée doit pointer vers une personne existante).
+    for (const [id, p] of Object.entries(data.people)) {
+      await set(ref(db, `people/${id}`), p);
+      log(`✓ ${p.name}`);
+    }
+    let n = 0;
+    for (const [id, it] of Object.entries(data.items)) {
+      await set(ref(db, `items/${id}`), it);
+      n++;
+    }
+    log(`✓ ${n} idées importées.`);
+    log("Terminé !");
+    const a = document.createElement("a");
+    a.href = "./"; a.textContent = "Ouvrir la liste des cadeaux →";
+    document.getElementById("log").append(a);
+  } catch (e) {
+    console.error(e);
+    log("Erreur : " + (e && e.message ? e.message : e));
+    btn.disabled = false;
+  }
+});
+</script>
+</body>
+</html>
