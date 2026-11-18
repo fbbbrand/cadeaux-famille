@@ -116,6 +116,11 @@
     display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none;
   }
   .jump-inner::-webkit-scrollbar { display: none; }
+  /* Souris / ordinateur : pas de défilement horizontal possible, on passe à la ligne */
+  @media (hover: hover) and (pointer: fine) {
+    .jump-inner { flex-wrap: wrap; overflow: visible; }
+    .jump .sep { display: none; }
+  }
   .chip {
     flex: none; display: inline-flex; align-items: center; gap: 6px;
     padding: 5px 12px 5px 5px; min-height: 38px; border-radius: 999px;
@@ -761,6 +766,10 @@ function render() {
 
 // Bordure sous la barre de navigation quand elle colle en haut
 const jump = $("#jump");
+// La hauteur de la barre varie (1 ou 2 lignes) : on décale le défilement d'autant
+new ResizeObserver(() => {
+  document.documentElement.style.scrollPaddingTop = `${jump.offsetHeight + 12}px`;
+}).observe(jump);
 const sentinel = document.createElement("div");
 jump.before(sentinel);
 new IntersectionObserver(([e]) => jump.classList.toggle("stuck", !e.isIntersecting)).observe(sentinel);
