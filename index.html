@@ -4,156 +4,233 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<meta name="theme-color" content="#b4442b">
+<meta name="theme-color" content="#f6f1e9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#171412" media="(prefers-color-scheme: dark)">
 <title>Cadeaux de la famille</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎁</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap">
 <style>
   :root {
-    --bg: #f7f2ea;
-    --card: #ffffff;
+    --bg: #f6f1e9;
+    --bg-glow: #fbe3d6;
+    --card: #fffdf9;
     --ink: #2a2420;
     --muted: #7a6f66;
-    --line: #e7ddd0;
+    --line: #ebe2d6;
+    --soft: #f3ece2;
     --accent: #b4442b;
-    --accent-ink: #ffffff;
-    --go: #2f7a55;
-    --go-soft: #e6f2ea;
-    --taken: #f1ece5;
+    --accent-soft: #fbe8e1;
+    --go: #2e7d57;
+    --go-soft: #e3f1e8;
     --danger: #b3261e;
-    --danger-soft: #fbe9e7;
     --focus: #1f6feb;
-    --radius: 14px;
+    --av-l: 88%; --av-s: 65%; --av-ink-l: 30%;
+    --radius: 18px;
+    --shadow: 0 1px 2px rgb(60 40 20 / .05), 0 4px 16px rgb(60 40 20 / .05);
+    --serif: "Fraunces", Georgia, "Times New Roman", serif;
   }
   @media (prefers-color-scheme: dark) {
     :root {
-      --bg: #1b1816;
-      --card: #262220;
+      --bg: #171412;
+      --bg-glow: #2a1d17;
+      --card: #221e1b;
       --ink: #f3ece4;
-      --muted: #a89c91;
-      --line: #3a3430;
-      --accent: #e0775c;
-      --accent-ink: #1b1816;
-      --go: #6cc497;
-      --go-soft: #1f3529;
-      --taken: #2e2925;
-      --danger: #f08a80;
-      --danger-soft: #3b2220;
+      --muted: #a59a8f;
+      --line: #342e2a;
+      --soft: #2b2622;
+      --accent: #ec8a6e;
+      --accent-soft: #3a2620;
+      --go: #2f805a;
+      --go-soft: #1d3127;
+      --danger: #f0857a;
       --focus: #7aa7ff;
+      --av-l: 30%; --av-s: 35%; --av-ink-l: 86%;
+      --shadow: 0 1px 2px rgb(0 0 0 / .3);
     }
   }
   * { box-sizing: border-box; }
-  html { -webkit-text-size-adjust: 100%; }
+  html { -webkit-text-size-adjust: 100%; scroll-padding-top: 76px; }
   body {
     margin: 0;
-    background: var(--bg);
+    background: radial-gradient(120% 340px at 50% -80px, var(--bg-glow), transparent 70%) no-repeat, var(--bg);
     color: var(--ink);
-    font: 16px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-    padding: 0 16px calc(48px + env(safe-area-inset-bottom));
+    font: 16px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    padding-bottom: calc(56px + env(safe-area-inset-bottom));
   }
-  main, header { max-width: 640px; margin: 0 auto; }
-  header { padding: 20px 0 8px; }
-  h1 { font-size: 1.6rem; margin: 0 0 14px; letter-spacing: -0.01em; }
-  h2 {
-    font-size: .8rem; text-transform: uppercase; letter-spacing: .08em;
-    color: var(--muted); margin: 28px 4px 10px;
-  }
+  .wrap { max-width: 640px; margin: 0 auto; padding: 0 16px; }
   button, input { font: inherit; color: inherit; }
-  button { cursor: pointer; }
+  button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
   :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+  [hidden] { display: none !important; }
+
+  /* ---------- en-tête ---------- */
+  header { padding-top: 28px; }
+  h1 {
+    font-family: var(--serif); font-weight: 700; font-size: clamp(1.5rem, 6.6vw, 2.1rem); line-height: 1.1;
+    margin: 0; letter-spacing: -0.015em;
+  }
+  .sub { color: var(--muted); margin: 6px 0 18px; }
 
   .me {
     background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
-    padding: 12px 14px;
+    padding: 14px 16px; box-shadow: var(--shadow);
   }
-  .me label { display: block; font-weight: 600; margin-bottom: 6px; }
-  .me small { display: block; color: var(--muted); margin-top: 6px; }
   .me.attention { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent); }
+  .me label { display: block; font-weight: 600; margin-bottom: 8px; }
+  .me small { display: block; color: var(--muted); margin-top: 8px; }
+  .inline { display: flex; gap: 8px; }
+  .inline input { flex: 1; min-width: 0; }
+  .me-view { display: flex; align-items: center; gap: 10px; }
+  .me-view .hello { flex: 1; min-width: 0; font-size: 1.05rem; overflow-wrap: anywhere; }
+
+  .mine { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); }
+  .mine-title { font-weight: 600; }
+  .mine-title span { color: var(--muted); font-weight: 400; }
+  .mine ul { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 4px; }
+  .mine li button {
+    width: 100%; text-align: left; background: var(--soft); border: 0; border-radius: 10px;
+    padding: 8px 12px; display: flex; gap: 8px; align-items: baseline;
+  }
+  .mine li .for { color: var(--muted); font-size: .85rem; white-space: nowrap; }
+  .mine li .what { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
   input[type=text], input[type=url] {
-    width: 100%; min-height: 44px; padding: 10px 12px;
-    border: 1px solid var(--line); border-radius: 10px; background: var(--bg);
+    width: 100%; min-height: 46px; padding: 10px 14px;
+    border: 1px solid var(--line); border-radius: 12px; background: var(--bg);
     font-size: 16px;
   }
   input::placeholder { color: var(--muted); opacity: .8; }
 
-  .banner {
-    max-width: 640px; margin: 10px auto 0; padding: 10px 14px; border-radius: 10px;
-    background: var(--danger-soft); color: var(--danger); font-size: .95rem;
+  /* ---------- barre de navigation ---------- */
+  .jump {
+    position: sticky; top: 0; z-index: 5; margin-top: 18px;
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+    -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+    border-bottom: 1px solid transparent;
   }
-  .banner[hidden] { display: none; }
+  .jump.stuck { border-bottom-color: var(--line); }
+  .jump-inner {
+    max-width: 640px; margin: 0 auto; padding: 10px 16px;
+    display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none;
+  }
+  .jump-inner::-webkit-scrollbar { display: none; }
+  .chip {
+    flex: none; display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 12px 5px 5px; min-height: 38px; border-radius: 999px;
+    background: var(--card); border: 1px solid var(--line); font-weight: 600; font-size: .92rem;
+  }
+  .chip .n {
+    min-width: 20px; height: 20px; padding: 0 6px; border-radius: 999px; font-size: .75rem;
+    display: inline-grid; place-items: center; background: var(--soft); color: var(--muted);
+  }
+  .chip .n.done { background: var(--go-soft); color: var(--go); }
+  .jump .sep { flex: none; width: 1px; background: var(--line); margin: 6px 2px; }
 
+  .avatar {
+    flex: none; display: inline-grid; place-items: center; border-radius: 50%;
+    width: 42px; height: 42px; font-weight: 700; font-family: var(--serif);
+    background: hsl(var(--h) var(--av-s) var(--av-l)); color: hsl(var(--h) 55% var(--av-ink-l));
+  }
+  .chip .avatar { width: 28px; height: 28px; font-size: .85rem; }
+
+  .banner {
+    max-width: 608px; margin: 12px auto 0; padding: 10px 14px; border-radius: 12px;
+    background: var(--accent-soft); color: var(--danger); font-size: .95rem;
+  }
+
+  /* ---------- listes ---------- */
+  h2 {
+    font-size: .78rem; text-transform: uppercase; letter-spacing: .1em;
+    color: var(--muted); margin: 26px 4px 10px;
+  }
   .person {
     background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
-    margin-bottom: 14px; overflow: hidden;
+    margin-bottom: 14px; overflow: hidden; box-shadow: var(--shadow);
   }
-  .person-head {
-    display: flex; align-items: baseline; justify-content: space-between; gap: 8px;
-    padding: 14px 16px 10px;
-  }
-  .person-head h3 { margin: 0; font-size: 1.25rem; overflow-wrap: anywhere; }
-  .count { color: var(--muted); font-size: .85rem; white-space: nowrap; }
-  ul.items { list-style: none; margin: 0; padding: 0; }
-  .empty { color: var(--muted); padding: 4px 16px 12px; margin: 0; font-style: italic; }
+  .person-head { display: flex; align-items: center; gap: 12px; padding: 14px 16px 12px; }
+  .person-head .who { flex: 1; min-width: 0; }
+  .person-head h3 { margin: 0; font-family: var(--serif); font-weight: 600; font-size: 1.35rem; line-height: 1.15; overflow-wrap: anywhere; }
+  .progress-text { color: var(--muted); font-size: .85rem; margin-top: 2px; }
+  .progress-text.done { color: var(--go); font-weight: 600; }
+  .bar { height: 4px; background: var(--soft); border-radius: 4px; margin-top: 8px; overflow: hidden; }
+  .bar i { display: block; height: 100%; background: var(--go); border-radius: 4px; transition: width .4s; }
 
-  .item {
-    display: flex; gap: 12px; padding: 12px 16px; border-top: 1px solid var(--line);
-  }
-  .item.taken { background: var(--taken); }
+  ul.items { list-style: none; margin: 0; padding: 0; }
+  .item { display: flex; gap: 12px; padding: 11px 16px; border-top: 1px solid var(--line); transition: background .2s; }
+  .item.taken { background: color-mix(in srgb, var(--soft) 60%, transparent); }
+  .item.flash { background: var(--accent-soft); }
   .item img {
-    width: 64px; height: 64px; object-fit: contain; flex: none;
-    background: #fff; border-radius: 10px; border: 1px solid var(--line);
+    width: 60px; height: 60px; object-fit: contain; flex: none;
+    background: #fff; border-radius: 12px; border: 1px solid var(--line);
   }
   .item-body { flex: 1; min-width: 0; }
   .label { font-weight: 600; overflow-wrap: anywhere; }
   .item.taken .label { color: var(--muted); }
-  .meta { color: var(--muted); font-size: .9rem; margin-top: 2px; display: flex; flex-wrap: wrap; gap: 4px 10px; }
+  .meta { color: var(--muted); font-size: .9rem; margin-top: 2px; display: flex; flex-wrap: wrap; gap: 2px 12px; }
   .meta a { color: var(--accent); font-weight: 600; text-decoration: none; }
   .meta a:hover { text-decoration: underline; }
-  .note { font-size: .9rem; margin-top: 2px; overflow-wrap: anywhere; }
-  .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 10px; }
+  .note { font-size: .9rem; color: var(--muted); margin-top: 2px; overflow-wrap: anywhere; }
+  .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 8px; }
 
   .btn {
-    min-height: 40px; padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line);
-    background: var(--card); font-weight: 600; font-size: .95rem;
-    transition: background .15s, color .15s, border-color .15s;
+    min-height: 40px; padding: 8px 16px; border-radius: 999px; border: 1px solid var(--line);
+    background: var(--card); font-weight: 600; font-size: .93rem;
+    transition: background .15s, color .15s, border-color .15s, transform .1s;
   }
+  .btn:active { transform: scale(.97); }
   .btn-go { background: var(--go); border-color: var(--go); color: #fff; }
-  @media (prefers-color-scheme: dark) { .btn-go { color: #0f1f17; } }
-  .btn-primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
-  .btn-ghost { background: transparent; border-color: transparent; color: var(--muted); font-weight: 500; padding-inline: 8px; }
+  .btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  @media (prefers-color-scheme: dark) { .btn-primary { color: #1b1412; } }
+  .btn-ghost { background: transparent; border-color: transparent; color: var(--muted); font-weight: 500; padding-inline: 10px; }
+  .btn-small { min-height: 34px; padding: 4px 12px; font-size: .85rem; }
   .btn-armed { background: var(--danger); border-color: var(--danger); color: #fff; }
-  @media (prefers-color-scheme: dark) { .btn-armed { color: #1b1816; } }
+  @media (prefers-color-scheme: dark) { .btn-armed { color: #1b1412; } }
   .btn:disabled { opacity: .55; cursor: default; }
-  .push { margin-left: auto; }
+  .icon-btn {
+    margin-left: auto; width: 40px; height: 40px; border-radius: 50%; border: 0;
+    background: transparent; color: var(--muted); display: inline-grid; place-items: center;
+  }
+  .icon-btn:hover { background: var(--soft); }
+  .icon-btn svg { width: 19px; height: 19px; }
+  .btn-armed.push { margin-left: auto; }
 
   .badge {
     display: inline-flex; align-items: center; gap: 6px;
-    background: var(--go-soft); color: var(--go); font-weight: 700; font-size: .9rem;
+    background: var(--go-soft); color: var(--go); font-weight: 700; font-size: .88rem;
     padding: 6px 12px; border-radius: 999px; overflow-wrap: anywhere;
   }
+  .item.mine .badge { background: var(--accent-soft); color: var(--accent); }
 
   .add-zone { padding: 10px 16px 14px; border-top: 1px solid var(--line); }
-  .add-toggle { width: 100%; background: transparent; border-style: dashed; color: var(--accent); }
+  .add-toggle {
+    width: 100%; min-height: 44px; border-radius: 12px; border: 1.5px dashed var(--line);
+    background: transparent; color: var(--accent); font-weight: 600;
+  }
+  .add-toggle:hover { background: var(--soft); }
   form.add { display: grid; gap: 10px; }
-  form.add[hidden] { display: none; }
   .field label { display: block; font-size: .9rem; font-weight: 600; margin-bottom: 4px; }
   .field label span { color: var(--muted); font-weight: 400; }
   .row { display: flex; gap: 10px; }
-  .row > * { flex: 1; }
+  .row > .field:first-child { flex: 0 0 34%; }
+  .row > .field:last-child { flex: 1; min-width: 0; }
   .form-actions { display: flex; gap: 8px; justify-content: flex-end; }
   .error { color: var(--danger); font-size: .9rem; margin: 0; }
   .error:empty { display: none; }
+  .empty { color: var(--muted); padding: 0 16px 12px; margin: 0; font-style: italic; }
 
-  .new-person { background: var(--card); border: 1px dashed var(--line); border-radius: var(--radius); padding: 14px 16px; margin-top: 24px; }
-  .new-person h2 { margin: 0 0 10px; }
+  .new-person { margin-top: 26px; }
+  .new-person .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow); }
+  .new-person h2 { margin: 0 0 12px; }
   .seg { display: flex; border: 1px solid var(--line); border-radius: 999px; padding: 3px; background: var(--bg); }
   .seg label { flex: 1; text-align: center; padding: 8px 0; border-radius: 999px; cursor: pointer; font-weight: 600; min-height: 38px; }
   .seg input { position: absolute; opacity: 0; pointer-events: none; }
-  .seg input:checked + span { color: var(--accent-ink); }
-  .seg label:has(input:checked) { background: var(--accent); color: var(--accent-ink); }
+  .seg label:has(input:checked) { background: var(--accent); color: #fff; }
+  @media (prefers-color-scheme: dark) { .seg label:has(input:checked) { color: #1b1412; } }
   .seg label:has(input:focus-visible) { outline: 3px solid var(--focus); outline-offset: 1px; }
 
-  .loading { text-align: center; color: var(--muted); padding: 40px 0; }
+  .loading { text-align: center; color: var(--muted); padding: 48px 0; }
 
   #toast {
     position: fixed; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom));
@@ -163,22 +240,40 @@
     transition: opacity .2s, transform .2s; z-index: 10;
   }
   #toast.show { opacity: 1; transform: translate(-50%, 0); }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
 </style>
 </head>
 <body>
-<header>
+<header class="wrap">
   <h1>🎁 Cadeaux de la famille</h1>
+  <p class="sub">Réserve une idée pour éviter les doublons. Tout le monde voit les changements en direct.</p>
+
   <div class="me" id="meBox">
-    <label for="me">Ton prénom</label>
-    <input id="me" type="text" maxlength="40" autocomplete="given-name" placeholder="Ex. : Julie">
-    <small>Il s'affiche quand tu réserves une idée. Il reste enregistré sur ce téléphone.</small>
+    <form id="meEdit" novalidate>
+      <label for="me">Ton prénom</label>
+      <div class="inline">
+        <input id="me" type="text" maxlength="40" autocomplete="given-name" placeholder="Ex. : Julie">
+        <button class="btn btn-primary" type="submit">OK</button>
+      </div>
+      <small>Il s'affiche quand tu réserves une idée. Il reste enregistré sur ce téléphone.</small>
+    </form>
+    <div class="me-view" id="meView" hidden>
+      <span class="hello">👋 Bonjour <strong id="meName"></strong></span>
+      <button class="btn btn-ghost btn-small" id="meChange" type="button">Changer</button>
+    </div>
+    <div class="mine" id="mine" hidden>
+      <div class="mine-title" id="mineTitle"></div>
+      <ul id="mineList"></ul>
+    </div>
   </div>
 </header>
+
+<nav class="jump" id="jump" aria-label="Aller à une personne" hidden><div class="jump-inner" id="jumpInner"></div></nav>
 
 <div class="banner" id="offline" hidden>Connexion perdue… les changements seront envoyés dès le retour du réseau.</div>
 <div class="banner" id="fatal" hidden></div>
 
-<main>
+<main class="wrap">
   <p class="loading" id="loading">Chargement…</p>
   <div id="lists" hidden>
     <h2>Enfants</h2>
@@ -187,19 +282,25 @@
     <div id="group-adulte"></div>
 
     <section class="new-person">
-      <h2>Ajouter une personne</h2>
-      <form class="add" id="personForm" novalidate>
-        <div class="field">
-          <label for="pName">Prénom</label>
-          <input id="pName" type="text" maxlength="40" required autocomplete="off">
-        </div>
-        <div class="seg" role="radiogroup" aria-label="Catégorie">
-          <label><input type="radio" name="group" value="enfant" checked><span>Enfant</span></label>
-          <label><input type="radio" name="group" value="adulte"><span>Adulte</span></label>
-        </div>
-        <p class="error" id="pError"></p>
-        <div class="form-actions"><button class="btn btn-primary" type="submit">Ajouter</button></div>
-      </form>
+      <button class="add-toggle" id="personToggle" type="button">+ Ajouter une personne</button>
+      <div class="card" id="personCard" hidden>
+        <h2>Ajouter une personne</h2>
+        <form class="add" id="personForm" novalidate>
+          <div class="field">
+            <label for="pName">Prénom</label>
+            <input id="pName" type="text" maxlength="40" required autocomplete="off">
+          </div>
+          <div class="seg" role="radiogroup" aria-label="Catégorie">
+            <label><input type="radio" name="group" value="enfant" checked><span>Enfant</span></label>
+            <label><input type="radio" name="group" value="adulte"><span>Adulte</span></label>
+          </div>
+          <p class="error" id="pError"></p>
+          <div class="form-actions">
+            <button class="btn btn-ghost" id="personCancel" type="button">Annuler</button>
+            <button class="btn btn-primary" type="submit">Ajouter</button>
+          </div>
+        </form>
+      </div>
     </section>
   </div>
 </main>
@@ -231,7 +332,37 @@ function h(tag, attrs = {}, ...children) {
   return el;
 }
 
+// Icône poubelle (SVG fixe, aucune donnée saisie dedans)
+function trashIcon() {
+  const ns = "http://www.w3.org/2000/svg";
+  const svg = document.createElementNS(ns, "svg");
+  svg.setAttribute("viewBox", "0 0 24 24");
+  svg.setAttribute("fill", "none");
+  svg.setAttribute("stroke", "currentColor");
+  svg.setAttribute("stroke-width", "2");
+  svg.setAttribute("stroke-linecap", "round");
+  svg.setAttribute("stroke-linejoin", "round");
+  svg.setAttribute("aria-hidden", "true");
+  for (const d of ["M3 6h18", "M8 6V4h8v2", "M19 6l-1 14H6L5 6", "M10 11v6", "M14 11v6"]) {
+    const p = document.createElementNS(ns, "path");
+    p.setAttribute("d", d);
+    svg.append(p);
+  }
+  return svg;
+}
+
 const clean = (s, max) => String(s ?? "").replace(/\s+/g, " ").trim().slice(0, max);
+const same = (a, b) => String(a ?? "").toLocaleLowerCase("fr") === String(b ?? "").toLocaleLowerCase("fr");
+
+// Couleur stable par prénom (teinte 0-359)
+function hue(name) {
+  let x = 7;
+  for (const c of String(name)) x = (x * 31 + c.codePointAt(0)) % 360;
+  return x;
+}
+function avatar(name) {
+  return h("span", { class: "avatar", style: `--h:${hue(name)}`, "aria-hidden": "true" }, [...String(name)][0]?.toLocaleUpperCase("fr") || "?");
+}
 
 // N'accepte que les liens http(s) ; ajoute https:// si on a tapé « www.… ».
 function safeUrl(raw) {
@@ -281,12 +412,35 @@ function fatal(msg) {
 // ---------- prénom (localStorage) ----------
 const meInput = $("#me");
 function getMe() { return clean(meInput.value, LIMITS.name); }
+function showMe(editing) {
+  const me = getMe();
+  const edit = editing || !me;
+  $("#meEdit").hidden = !edit;
+  $("#meView").hidden = edit;
+  $("#meName").textContent = me;
+}
 try { meInput.value = localStorage.getItem(NAME_KEY) || ""; } catch {}
+showMe(false);
+
 meInput.addEventListener("input", () => {
   $("#meBox").classList.remove("attention");
   try { localStorage.setItem(NAME_KEY, getMe()); } catch {}
+  render();
+});
+$("#meEdit").addEventListener("submit", (ev) => {
+  ev.preventDefault();
+  if (!getMe()) { meInput.focus(); return; }
+  meInput.value = getMe();
+  showMe(false);
+  render();
+});
+$("#meChange").addEventListener("click", () => {
+  showMe(true);
+  meInput.focus();
+  meInput.select();
 });
 function askName() {
+  showMe(true);
   $("#meBox").classList.add("attention");
   window.scrollTo({ top: 0, behavior: "smooth" });
   setTimeout(() => meInput.focus({ preventScroll: true }), 250);
@@ -294,8 +448,8 @@ function askName() {
 }
 
 // ---------- confirmation en 2 temps ----------
-// Premier appui : le bouton passe en rouge « Confirmer ? ». Second appui
-// dans les 4 secondes : l'action est faite. Sinon, retour à l'état normal.
+// Premier appui : le bouton passe en rouge « … ? ». Second appui dans les
+// 4 secondes : l'action est faite. Sinon, retour à l'état normal.
 let armed = null; // { key, timer }
 function disarm() {
   if (!armed) return;
@@ -359,6 +513,7 @@ async function start() {
 async function reserve(id) {
   const me = getMe();
   if (!me) return askName();
+  if (!$("#meEdit").hidden) showMe(false);
   try {
     const res = await fb.runTransaction(fb.ref(db, `items/${id}/takenBy`), (cur) => (cur ? undefined : me));
     if (!res.committed) toast(`Déjà pris par ${res.snapshot.val()}.`);
@@ -378,14 +533,15 @@ async function removeItem(id) {
   catch (e) { console.error(e); toast("Impossible de supprimer cette idée."); }
 }
 
-async function addItem(personId, form) {
+async function addItem(personId, form, close) {
+  const f = form.elements;
   const err = form.querySelector(".error");
-  const label = clean(form.elements.label.value, LIMITS.label);
-  const price = parsePrice(form.elements.price.value);
-  const url = safeUrl(form.elements.url.value);
-  if (!label) { err.textContent = "L'intitulé est obligatoire."; form.elements.label.focus(); return; }
-  if (price === null) { err.textContent = "Prix invalide (ex. : 24,90)."; form.elements.price.focus(); return; }
-  if (url === null) { err.textContent = "Le lien doit commencer par http:// ou https://"; form.elements.url.focus(); return; }
+  const label = clean(f.label.value, LIMITS.label);
+  const price = parsePrice(f.price.value);
+  const url = safeUrl(f.url.value);
+  if (!label) { err.textContent = "L'intitulé est obligatoire."; f.label.focus(); return; }
+  if (price === null) { err.textContent = "Prix invalide (ex. : 24,90)."; f.price.focus(); return; }
+  if (url === null) { err.textContent = "Le lien doit commencer par http:// ou https://"; f.url.focus(); return; }
   err.textContent = "";
   const data = { personId, label, order: Date.now() };
   if (price !== undefined) data.price = price;
@@ -394,9 +550,7 @@ async function addItem(personId, form) {
   btn.disabled = true;
   try {
     await fb.set(fb.push(fb.ref(db, "items")), data);
-    form.reset();
-    form.hidden = true;
-    form.previousElementSibling.hidden = false;
+    close();
     toast("Idée ajoutée.");
   } catch (e) {
     console.error(e);
@@ -404,21 +558,34 @@ async function addItem(personId, form) {
   } finally { btn.disabled = false; }
 }
 
-$("#personForm").addEventListener("submit", async (ev) => {
+// Ajouter une personne
+const personForm = $("#personForm");
+function closePersonForm() {
+  personForm.reset();
+  $("#pError").textContent = "";
+  $("#personCard").hidden = true;
+  $("#personToggle").hidden = false;
+}
+$("#personToggle").addEventListener("click", () => {
+  $("#personToggle").hidden = true;
+  $("#personCard").hidden = false;
+  $("#pName").focus();
+});
+$("#personCancel").addEventListener("click", closePersonForm);
+personForm.addEventListener("submit", async (ev) => {
   ev.preventDefault();
-  const form = ev.currentTarget;
+  const f = personForm.elements;
   const err = $("#pError");
-  const name = clean(form.elements.pName.value, LIMITS.name);
-  const group = form.elements.group.value === "adulte" ? "adulte" : "enfant";
-  if (!name) { err.textContent = "Le prénom est obligatoire."; form.elements.pName.focus(); return; }
-  const exists = Object.values(people || {}).some((p) => String(p.name).toLocaleLowerCase("fr") === name.toLocaleLowerCase("fr"));
-  if (exists) { err.textContent = `${name} est déjà dans la liste.`; return; }
+  const name = clean(f.pName.value, LIMITS.name);
+  const group = f.group.value === "adulte" ? "adulte" : "enfant";
+  if (!name) { err.textContent = "Le prénom est obligatoire."; f.pName.focus(); return; }
+  if (Object.values(people || {}).some((p) => same(p.name, name))) { err.textContent = `${name} est déjà dans la liste.`; return; }
   err.textContent = "";
-  const btn = form.querySelector("[type=submit]");
+  const btn = personForm.querySelector("[type=submit]");
   btn.disabled = true;
   try {
     await fb.set(fb.push(fb.ref(db, "people")), { name, group, order: Date.now() });
-    form.reset();
+    closePersonForm();
     toast(`${name} a été ajouté·e.`);
   } catch (e) {
     console.error(e);
@@ -426,16 +593,27 @@ $("#personForm").addEventListener("submit", async (ev) => {
   } finally { btn.disabled = false; }
 });
 
+function goTo(el, flashItem) {
+  el.scrollIntoView({ behavior: "smooth", block: flashItem ? "center" : "start" });
+  if (flashItem) {
+    el.classList.add("flash");
+    setTimeout(() => el.classList.remove("flash"), 1200);
+  }
+}
+
 // ---------- affichage ----------
 // Chaque personne a une carte créée une seule fois (le formulaire d'ajout
 // garde donc sa saisie) ; seule la liste des idées est redessinée.
 const cards = new Map();
 
 function makeCard(id) {
+  const av = h("span");
   const title = h("h3");
-  const count = h("span", { class: "count" });
+  const progress = h("div", { class: "progress-text" });
+  const barFill = h("i");
+  const bar = h("div", { class: "bar" }, barFill);
   const list = h("ul", { class: "items" });
-  const empty = h("p", { class: "empty" }, "Aucune idée pour l'instant.");
+  const empty = h("p", { class: "empty" }, "Pas encore d'idée. Ajoutes-en une !");
 
   const form = h("form", { class: "add", hidden: true, novalidate: true },
     h("div", { class: "field" },
@@ -443,26 +621,27 @@ function makeCard(id) {
       h("input", { id: `l-${id}`, name: "label", type: "text", maxlength: LIMITS.label, required: true, autocomplete: "off" })),
     h("div", { class: "row" },
       h("div", { class: "field" },
-        h("label", { for: `p-${id}` }, "Prix ", h("span", {}, "(facultatif)")),
+        h("label", { for: `p-${id}` }, "Prix ", h("span", {}, "(facult.)")),
         h("input", { id: `p-${id}`, name: "price", type: "text", inputmode: "decimal", maxlength: 12, placeholder: "€", autocomplete: "off" })),
       h("div", { class: "field" },
         h("label", { for: `u-${id}` }, "Lien ", h("span", {}, "(facultatif)")),
         h("input", { id: `u-${id}`, name: "url", type: "url", inputmode: "url", maxlength: LIMITS.url, placeholder: "https://…", autocomplete: "off" }))),
     h("p", { class: "error" }),
     h("div", { class: "form-actions" },
-      h("button", { class: "btn btn-ghost", type: "button", onclick: () => { form.reset(); form.querySelector(".error").textContent = ""; form.hidden = true; toggle.hidden = false; } }, "Annuler"),
+      h("button", { class: "btn btn-ghost", type: "button", onclick: () => close() }, "Annuler"),
       h("button", { class: "btn btn-primary", type: "submit" }, "Ajouter")));
-  form.addEventListener("submit", (ev) => { ev.preventDefault(); addItem(id, form); });
+  const close = () => { form.reset(); form.querySelector(".error").textContent = ""; form.hidden = true; toggle.hidden = false; };
+  form.addEventListener("submit", (ev) => { ev.preventDefault(); addItem(id, form, close); });
 
-  const toggle = h("button", { class: "btn add-toggle", type: "button", onclick: () => {
+  const toggle = h("button", { class: "add-toggle", type: "button", onclick: () => {
     toggle.hidden = true; form.hidden = false; form.elements.label.focus();
   } }, "+ Ajouter une idée");
 
-  const root = h("section", { class: "person", "data-person": id },
-    h("div", { class: "person-head" }, title, count),
+  const root = h("section", { class: "person", id: `pers-${id}`, "data-person": id },
+    h("div", { class: "person-head" }, av, h("div", { class: "who" }, title, progress, bar)),
     empty, list,
     h("div", { class: "add-zone" }, toggle, form));
-  const card = { root, title, count, list, empty };
+  const card = { root, av, title, progress, bar, barFill, list, empty, toggle, name: null };
   cards.set(id, card);
   return card;
 }
@@ -470,6 +649,7 @@ function makeCard(id) {
 function renderItem(id, it) {
   const taken = typeof it.takenBy === "string" && it.takenBy !== "";
   const me = getMe();
+  const mine = taken && me && same(it.takenBy, me);
   const url = safeUrl(it.url);
   const img = safeImg(it.img);
   const delKey = `del:${id}`, relKey = `rel:${id}`;
@@ -480,22 +660,23 @@ function renderItem(id, it) {
 
   const status = taken
     ? [
-        h("span", { class: "badge" }, `Pris par ${it.takenBy}${me && it.takenBy.toLocaleLowerCase("fr") === me.toLocaleLowerCase("fr") ? " (toi)" : ""}`),
-        h("button", { class: `btn ${isArmed(relKey) ? "btn-armed" : ""}`, type: "button", onclick: () => twoStep(relKey, () => release(id)) },
+        h("span", { class: "badge" }, `✓ Pris par ${it.takenBy}${mine ? " (toi)" : ""}`),
+        h("button", { class: `btn btn-small ${isArmed(relKey) ? "btn-armed" : ""}`, type: "button", onclick: () => twoStep(relKey, () => release(id)) },
           isArmed(relKey) ? "Confirmer la libération ?" : "Libérer"),
       ]
     : [h("button", { class: "btn btn-go", type: "button", onclick: () => reserve(id) }, "Je m'en occupe")];
 
-  return h("li", { class: `item${taken ? " taken" : ""}`, "data-item": id },
-    img ? h("img", { src: img, alt: "", loading: "lazy", width: 64, height: 64, onerror: (e) => e.currentTarget.remove() }) : null,
+  const del = isArmed(delKey)
+    ? h("button", { class: "btn btn-small btn-armed push", type: "button", onclick: () => twoStep(delKey, () => removeItem(id)) }, "Confirmer la suppression ?")
+    : h("button", { class: "icon-btn", type: "button", "aria-label": `Supprimer « ${it.label} »`, title: "Supprimer", onclick: () => twoStep(delKey, () => removeItem(id)) }, trashIcon());
+
+  return h("li", { class: `item${taken ? " taken" : ""}${mine ? " mine" : ""}`, id: `item-${id}`, "data-item": id },
+    img ? h("img", { src: img, alt: "", loading: "lazy", width: 60, height: 60, onerror: (e) => e.currentTarget.remove() }) : null,
     h("div", { class: "item-body" },
       h("div", { class: "label" }, it.label),
       meta.length ? h("div", { class: "meta" }, meta) : null,
       typeof it.note === "string" && it.note ? h("div", { class: "note" }, it.note) : null,
-      h("div", { class: "actions" },
-        status,
-        h("button", { class: `btn push ${isArmed(delKey) ? "btn-armed" : "btn-ghost"}`, type: "button", onclick: () => twoStep(delKey, () => removeItem(id)) },
-          isArmed(delKey) ? "Confirmer la suppression ?" : "Supprimer"))));
+      h("div", { class: "actions" }, status, del)));
 }
 
 const byOrder = (a, b) => (Number(a[1].order) || 0) - (Number(b[1].order) || 0) || String(a[0]).localeCompare(String(b[0]));
@@ -514,28 +695,75 @@ function render() {
   }
 
   const seen = new Set();
+  const chips = [];
+  const me = getMe();
+  const mine = [];
+
   for (const group of ["enfant", "adulte"]) {
     const container = $(`#group-${group}`);
     const list = Object.entries(people).filter(([, p]) => p && p.group === group && typeof p.name === "string").sort(byOrder);
+    if (group === "adulte" && chips.length && list.length) chips.push(h("span", { class: "sep", "aria-hidden": "true" }));
     list.forEach(([pid, p], i) => {
       seen.add(pid);
       const card = cards.get(pid) || makeCard(pid);
-      card.title.textContent = p.name;
+      if (card.name !== p.name) {
+        card.name = p.name;
+        card.title.textContent = p.name;
+        card.av.replaceWith(card.av = avatar(p.name));
+        card.toggle.textContent = `+ Ajouter une idée pour ${p.name}`;
+      }
       const its = itemsByPerson.get(pid) || [];
       const nTaken = its.filter(([, it]) => it.takenBy).length;
-      card.count.textContent = its.length
-        ? `${its.length} idée${its.length > 1 ? "s" : ""} · ${nTaken} prise${nTaken > 1 ? "s" : ""}`
-        : "";
+      const left = its.length - nTaken;
+      const allDone = its.length > 0 && left === 0;
+      card.progress.textContent = !its.length ? "Pas encore d'idée"
+        : allDone ? "Tout est réservé 🎉"
+        : nTaken === 0 ? `${its.length} idée${its.length > 1 ? "s" : ""}, aucune réservée`
+        : `${nTaken} sur ${its.length} réservée${nTaken > 1 ? "s" : ""}`;
+      card.progress.classList.toggle("done", allDone);
+      card.bar.hidden = !its.length;
+      card.barFill.style.width = its.length ? `${Math.round((nTaken / its.length) * 100)}%` : "0";
       card.empty.hidden = its.length > 0;
       card.list.replaceChildren(...its.map(([iid, it]) => renderItem(iid, it)));
       // Ne déplace la carte que si nécessaire (garde le focus dans un formulaire ouvert)
       if (container.children[i] !== card.root) container.insertBefore(card.root, container.children[i] || null);
+
+      chips.push(h("button", { class: "chip", type: "button", onclick: () => goTo(card.root) },
+        avatar(p.name), p.name,
+        its.length ? h("span", { class: `n${allDone ? " done" : ""}`, title: allDone ? "Tout est réservé" : `${left} idée(s) libre(s)` }, allDone ? "✓" : String(left)) : null));
+
+      if (me) for (const [iid, it] of its) if (it.takenBy && same(it.takenBy, me)) mine.push({ iid, it, who: p.name });
     });
   }
   for (const [pid, card] of cards) {
     if (!seen.has(pid)) { card.root.remove(); cards.delete(pid); }
   }
+
+  const inner = $("#jumpInner");
+  const sx = inner.scrollLeft;
+  inner.replaceChildren(...chips);
+  inner.scrollLeft = sx;
+  $("#jump").hidden = chips.length === 0;
+
+  // Récap « Tu t'occupes de… »
+  $("#mine").hidden = mine.length === 0;
+  if (mine.length) {
+    const total = mine.reduce((s, m) => s + (typeof m.it.price === "number" ? m.it.price : 0), 0);
+    $("#mineTitle").replaceChildren(
+      `Tu t'occupes de ${mine.length} cadeau${mine.length > 1 ? "x" : ""}`,
+      total ? h("span", {}, ` · ${euro.format(total)}`) : "");
+    $("#mineList").replaceChildren(...mine.map((m) => h("li", {},
+      h("button", { type: "button", onclick: () => { const el = document.getElementById(`item-${m.iid}`); if (el) goTo(el, true); } },
+        h("span", { class: "for" }, `Pour ${m.who}`),
+        h("span", { class: "what" }, m.it.label)))));
+  }
 }
+
+// Bordure sous la barre de navigation quand elle colle en haut
+const jump = $("#jump");
+const sentinel = document.createElement("div");
+jump.before(sentinel);
+new IntersectionObserver(([e]) => jump.classList.toggle("stuck", !e.isIntersecting)).observe(sentinel);
 
 start();
 </script>
